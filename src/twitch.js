@@ -53,7 +53,6 @@ class Twitch extends EventEmitter {
 
   getStreams() {
     this.init();
-    console.log('Getting streams!');
     let channels = this.iteratorToArray(this.subscribers.keys());
 
     let notOnline = new Map();
@@ -81,9 +80,21 @@ class Twitch extends EventEmitter {
   subscribe(name, phoneNumber) {
     this.init();
     if (this.subscribers.has(name)) {
-      this.subscribers.get(name).push(phoneNumber);
+      let numbers = this.subscribers.get(name);
+      numbers.push(phoneNumber);
+      this.subscribers.set(name, numbers);
     } else {
       this.subscribers.set(name, [ phoneNumber ]);
+    }
+  }
+
+  unsubscribe(name, phoneNumber) {
+    this.init();
+    if (this.subscribers.has(name)) {
+      let numbers = this.subscribers.get(name);
+      let idx = numbers.indexOf(phoneNumber);
+      numbers.splice(idx, 1);
+      this.subscribers.set(name, numbers);
     }
   }
 

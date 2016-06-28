@@ -50,9 +50,32 @@ server.use(bodyParser.urlencoded({ extended: false }))
 server.use(bodyParser.json())
 
 server.post('/sms', (req, res, next) => {
-  Twitch.subscribe(req.body.Body, req.body.From);
   res.header('Content-Type', 'text/plain');
-  res.send('Thanks for subscribing!');
+  // to subscribe text:
+  // SUBSCRIBE: channel_name
+  // to unsubscribe text:
+  // UNSUBSCRIBE: channel_name
+  const SUBSCRIBE = 'subscribe';
+  const UNSUBSCRIBE = 'unsubscribe';
+  let text = req.body.Body;
+  
+  if (text.toLowerCase().indexOf(SUBSCRIBE) === 0) {
+    text = text.substr(SUBSCRIBE.length + 1).trim();
+    console.log(`subscribed for ${text}`);
+    Twitch.subscribe(text, req.body.From);
+    res.send('Thanks for subscribing!');
+  } else if (text.toLowerCase().indexOf(UNSUBSCRIBE) === 0) {
+    text = text.substr(UNSUBSCRIBE.length + 1).trim();
+    console.log(`unsubscribed for ${text}`);
+    Twitch.unsubscribe(text, req.body.From);
+    res.send('Thanks for unsubscribing!');
+  } else {
+    res.send(`Wrong format! Use: 
+SUBSCRIBE: channel_name
+or
+UNSUBSCRIBE: channel_name
+    `)
+  }
 });
 
 server.listen(PORT, () => {
