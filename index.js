@@ -39,7 +39,7 @@ Twitch.on('went-offline', ({ name }) => {
 
 // Twitch.subscribe('dkundel', process.env.MY_PHONE_NUMBER);
 // Twitch.subscribe('marcos_placona', process.env.MY_PHONE_NUMBER);
-// Twitch.startPoll(5);
+Twitch.startPoll(5);
 
 const server = restify.createServer();
 
@@ -50,7 +50,7 @@ server.use(bodyParser.urlencoded({ extended: false }))
 server.use(bodyParser.json())
 
 server.post('/sms', (req, res, next) => {
-  console.log(req.body.Body);
+  Twitch.subscribe(req.body.Body, req.body.From);
   res.header('Content-Type', 'text/plain');
   res.send('Thanks for subscribing!');
 });

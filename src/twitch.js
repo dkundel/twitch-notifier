@@ -64,8 +64,6 @@ class Twitch extends EventEmitter {
     }
 
     this.makeRequest('streams', { channel: channels.join(',') }, (err, resp, body) => {
-      let name = body.streams[0].channel.name;
-
       body.streams.forEach((stream) => {
         let name = stream.channel.name;
         notOnline.delete(name);
