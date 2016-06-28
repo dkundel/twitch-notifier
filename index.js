@@ -8,6 +8,7 @@ const client = twilio(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_AUTH_TO
 const success = chalk.bold.green;
 const error = chalk.bold.red;
 const PORT = process.env.PORT || 3000;
+const PHONE_NUMBER = process.env.TWILIO_PHONE_NUMBER;
 
 const { Twitch } = require('./src/twitch');
 
@@ -17,7 +18,7 @@ function notifyUsers(name, message) {
   if (Twitch.subscribers.has(name)) {
     Twitch.subscribers.get(name).forEach((number) => {
       client.sendMessage({
-        from: '+4915735982633',
+        from: PHONE_NUMBER,
         to: number,
         body: message
       }).then(() => {
@@ -36,10 +37,6 @@ Twitch.on('went-offline', ({ name }) => {
   console.log(`${name} went ${error('offline')}!`);
   notifyUsers(name, `Hi! ${name} just went offline :(!`);
 });
-
-// Twitch.subscribe('dkundel', process.env.MY_PHONE_NUMBER);
-// Twitch.subscribe('marcos_placona', process.env.MY_PHONE_NUMBER);
-Twitch.startPoll(5);
 
 const server = restify.createServer();
 
@@ -80,4 +77,6 @@ UNSUBSCRIBE: channel_name
 
 server.listen(PORT, () => {
   console.log(`Listening on port ${PORT}`);
+  console.log('Start polling Twitch');
+  Twitch.startPoll(60);
 });
