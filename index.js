@@ -17,4 +17,4 @@ Twitch.on('went-offline', ({ name }) => {
 
 Twitch.subscribe('dkundel', '+11111111111');
 Twitch.subscribe('marcos_placona', '+1111111111');
-Twitch.getStreams();
+Twitch.startPoll(5);

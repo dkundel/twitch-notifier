@@ -53,13 +53,14 @@ class Twitch extends EventEmitter {
 
   getStreams() {
     this.init();
+    console.log('Getting streams!');
     let channels = this.iteratorToArray(this.subscribers.keys());
-
-    console.log(channels);
 
     let notOnline = new Map();
     for (let [channel, numbers] of this.subscribers) {
-      notOnline.set(channel, true);
+      if (this.currentlyOnline.has(channel)) {
+        notOnline.set(channel, true);
+      }
     }
 
     this.makeRequest('streams', { channel: channels.join(',') }, (err, resp, body) => {
@@ -85,6 +86,25 @@ class Twitch extends EventEmitter {
       this.subscribers.get(name).push(phoneNumber);
     } else {
       this.subscribers.set(name, [ phoneNumber ]);
+    }
+  }
+
+  startPoll(intervalInSeconds = 60) {
+    if (this.pollInterval) {
+      return;
+    }
+
+    this.getStreams();
+    let intervalInMs = intervalInSeconds * 1000;
+    this.pollInterval = setInterval(() => {
+      this.getStreams();
+    }, intervalInMs);
+  }
+
+  stopPoll() {
+    if (this.pollInterval) {
+      clearInterval(this.pollInterval);
+      this.pollInterval = undefined;
     }
   }
 }
