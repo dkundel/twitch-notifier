@@ -1,0 +1,30 @@
+{
+  "name": "twitch-notifier",
+  "version": "1.0.0",
+  "description": "An SMS notifier for Twitch streams",
+  "main": "index.js",
+  "private": true,
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dkundel/twitch-notifier.git"
+  },
+  "keywords": [
+    "twitch",
+    "sms",
+    "twilio",
+    "node"
+  ],
+  "author": "Dominik Kundel <dominik.kundel@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/dkundel/twitch-notifier/issues"
+  },
+  "homepage": "https://github.com/dkundel/twitch-notifier#readme",
+  "dependencies": {
+    "request": "^2.72.0"
+  }
+}
